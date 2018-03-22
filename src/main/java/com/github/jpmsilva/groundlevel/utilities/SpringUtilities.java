@@ -87,11 +87,11 @@ public abstract class SpringUtilities {
    *
    * <p>Take the following example:
    *
-   * <pre>{@code
-   *    @literal @Order(value=1)
+   * <pre>
+   *     &#064;Order(value=1)
    *     public class MyBean {
    *     }
-   * }</pre>
+   * </pre>
    *
    * <p>In such a case, fetching the annotation attributes of {@code @Order} on an instance of
    * {@code MyBean} will wield a map with key="value" and value=1.
@@ -99,15 +99,15 @@ public abstract class SpringUtilities {
    * <p>Now consider that an instance of the class {@code MyBean} is also defined as a Spring bean,
    * using a configuration class such as:
    *
-   * <pre>{@code
-   *    @literal @Configuration
+   * <pre>
+   *     &#064;Configuration
    *     public class MyConfiguration {
-   *        @literal @Bean @Order(value=2)
+   *         &#064;Bean @Order(value=2)}
    *         public MyBean myBean() {
    *           return new MyBean();
    *         }
    *     }
-   * }</pre>
+   * </pre>
    *
    * <p>In such a case, fetching the annotation attributes of {@code @Order} on the instance {@code
    * myBean()} will wield a map with key="value" and value=2.
@@ -117,6 +117,8 @@ public abstract class SpringUtilities {
    * @param beanFactory The bean factory where the bean may haves been defined.
    * @param type The type of the annotation.
    * @param bean The object for which annotation attributes should be calculated.
+   * @return A {@link Map} containing as keys the annotation attribute names and as values the
+   * annotation attribute values.
    */
   public static Map<String, Object> beanAnnotationAttributes(
       ConfigurableListableBeanFactory beanFactory, Class<? extends Annotation> type, Object bean) {
