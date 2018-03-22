@@ -21,7 +21,7 @@ limitations under the License.
 
   <groupId>com.github.jpmsilva.groundlevel-utilities</groupId>
   <artifactId>groundlevel-utilities</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>groundlevel-utilities</name>
   <description>General purpose library with reusable code for Spring projects</description>
