@@ -21,21 +21,46 @@ import java.util.Collection;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+/**
+ * Utilities related to {@link String}.
+ */
 public abstract class StringUtilities {
 
   private StringUtilities() {
   }
 
+  /**
+   * Joins a {@link Collection} of strings with a specified separator.
+   *
+   * @param separator the separator to use
+   * @param parts the parts to join
+   * @return a string representation of the joined parts
+   * @see StringJoiner
+   */
   public static String join(CharSequence separator, Collection<?> parts) {
     StringJoiner stringJoiner = new StringJoiner(separator);
     parts.stream().map(Object::toString).forEach(stringJoiner::add);
     return stringJoiner.toString();
   }
 
+  /**
+   * Joins aa array of strings with a specified separator.
+   *
+   * @param separator the separator to use
+   * @param parts the parts to join
+   * @return a string representation of the joined parts
+   * @see StringJoiner
+   */
   public static String join(CharSequence separator, CharSequence[] parts) {
     return join(separator, Arrays.asList(parts));
   }
 
+  /**
+   * A {@link Predicate} that returns {@code true} when the argument is equal to a specific string.
+   *
+   * @param input the specific string to compare to
+   * @return the predicate
+   */
   public static Predicate<String> equals(String input) {
     return s -> s.equals(input);
   }
