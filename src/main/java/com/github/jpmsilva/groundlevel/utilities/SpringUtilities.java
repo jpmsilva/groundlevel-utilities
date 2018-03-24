@@ -123,6 +123,7 @@ public abstract class SpringUtilities {
   public static Map<String, Object> beanAnnotationAttributes(
       ConfigurableListableBeanFactory beanFactory, Class<? extends Annotation> type, Object bean) {
     List<BeanDefinition> beanTypes = Arrays.stream(beanFactory.getBeanNamesForType(bean.getClass()))
+        .filter(beanFactory::containsBeanDefinition)
         .map(beanFactory::getBeanDefinition)
         .filter(hasMethodAnnotation(type))
         .collect(Collectors.toList());
