@@ -1,0 +1,15 @@
+# How to use
+
+First, import the `groundlevel-utilities` module as a dependency:
+
+```xml
+  <dependencies>
+    <dependency>
+      <groupId>com.github.jpmsilva.groundlevel-utilities</groupId>
+      <artifactId>groundlevel-utilities</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+```
+
+That's it.
