@@ -16,9 +16,6 @@
 
 package com.github.jpmsilva.groundlevel.utilities;
 
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
-
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,20 +32,39 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.MethodMetadata;
 
+/**
+ * Utilities related to the Spring framework.
+ */
 public abstract class SpringUtilities {
 
   private SpringUtilities() {
   }
 
+  /**
+   * Obtains a {@link List} of beans from a {@link ApplicationContext}, sorted under {@link QuackAnnotationAwareOrderComparator} rules.
+   *
+   * @param applicationContext the application context to obtain the beans
+   * @param type the type of beans to obtain
+   * @param <T> the type of beans to obtain
+   * @return the sorted list of beans
+   */
   public static <T> List<T> getSortedBeansOfType(ApplicationContext applicationContext,
       Class<T> type) {
     if (applicationContext instanceof ConfigurableApplicationContext) {
       return getSortedBeansOfType(
           ((ConfigurableApplicationContext) applicationContext).getBeanFactory(), type);
     }
-    return getSortedBeansOfType(((BeanFactory) applicationContext), type);
+    return getSortedBeansOfType((BeanFactory) applicationContext, type);
   }
 
+  /**
+   * Obtains a {@link List} of beans from a {@link BeanFactory}, sorted under {@link QuackAnnotationAwareOrderComparator} rules.
+   *
+   * @param factory the bean factory to obtain the beans
+   * @param type the type of beans to obtain
+   * @param <T> the type of beans to obtain
+   * @return the sorted list of beans
+   */
   public static <T> List<T> getSortedBeansOfType(BeanFactory factory, Class<T> type) {
     if (!(factory instanceof ConfigurableListableBeanFactory)) {
       return Collections.emptyList();
@@ -59,14 +75,21 @@ public abstract class SpringUtilities {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Obtains a {@link List} of beans from a {@link BeanFactory} that have a specific annotation.
+   *
+   * @param beanFactory the bean factory to obtain the beans
+   * @param type the annotation type beans must have
+   * @return the list of beans with the annotation
+   */
   public static List<String> beansAnnotatedWith(ConfigurableListableBeanFactory beanFactory,
       Class<? extends Annotation> type) {
-    return stream(beanFactory.getBeanDefinitionNames())
+    return Arrays.stream(beanFactory.getBeanDefinitionNames())
         .filter(beanAnnotatedWith(beanFactory, type))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
-  public static Predicate<String> beanAnnotatedWith(ConfigurableListableBeanFactory beanFactory,
+  private static Predicate<String> beanAnnotatedWith(ConfigurableListableBeanFactory beanFactory,
       Class<? extends Annotation> type) {
     return name -> {
       BeanDefinition bd = beanFactory.getBeanDefinition(name);
@@ -81,9 +104,8 @@ public abstract class SpringUtilities {
   }
 
   /**
-   * Calculates the attributes of annotation {@code type}, taking into consideration class level
-   * annotations (from {@code bean.getClass()}), as well as method level annotations when the bean
-   * has been added to the bean factory by a Java method.
+   * Calculates the attributes of annotation {@code type}, taking into consideration class level annotations (from {@code bean.getClass()}), as well as method
+   * level annotations when the bean has been added to the bean factory by a Java method.
    *
    * <p>Take the following example:
    *
@@ -93,11 +115,9 @@ public abstract class SpringUtilities {
    *     }
    * </pre>
    *
-   * <p>In such a case, fetching the annotation attributes of {@code @Order} on an instance of
-   * {@code MyBean} will wield a map with key="value" and value=1.
+   * <p>In such a case, fetching the annotation attributes of {@code @Order} on an instance of {@code MyBean} will wield a map with key="value" and value=1.
    *
-   * <p>Now consider that an instance of the class {@code MyBean} is also defined as a Spring bean,
-   * using a configuration class such as:
+   * <p>Now consider that an instance of the class {@code MyBean} is also defined as a Spring bean, using a configuration class such as:
    *
    * <pre>
    *     &#064;Configuration
@@ -109,16 +129,14 @@ public abstract class SpringUtilities {
    *     }
    * </pre>
    *
-   * <p>In such a case, fetching the annotation attributes of {@code @Order} on the instance {@code
-   * myBean()} will wield a map with key="value" and value=2.
+   * <p>In such a case, fetching the annotation attributes of {@code @Order} on the instance {@code myBean()} will wield a map with key="value" and value=2.
    *
    * <p>Annotations at the method level take precedence over annotations at the class level.
    *
    * @param beanFactory The bean factory where the bean may haves been defined.
    * @param type The type of the annotation.
    * @param bean The object for which annotation attributes should be calculated.
-   * @return A {@link Map} containing as keys the annotation attribute names and as values the
-   * annotation attribute values.
+   * @return A {@link Map} containing as keys the annotation attribute names and as values the annotation attribute values.
    */
   public static Map<String, Object> beanAnnotationAttributes(
       ConfigurableListableBeanFactory beanFactory, Class<? extends Annotation> type, Object bean) {
@@ -139,16 +157,6 @@ public abstract class SpringUtilities {
     return results;
   }
 
-  private static Predicate<BeanDefinition> hasMethodAnnotation(Class<? extends Annotation> type) {
-    return beanDefinition -> {
-      if (beanDefinition.getSource() instanceof MethodMetadata) {
-        MethodMetadata metadata = (MethodMetadata) beanDefinition.getSource();
-        return metadata.isAnnotated(type.getName());
-      }
-      return false;
-    };
-  }
-
   private static Map<String, Object> beanAnnotationAttributes(Class<? extends Annotation> type,
       Object bean) {
     Annotation annotation = AnnotationUtils.findAnnotation(bean.getClass(), type);
@@ -166,5 +174,15 @@ public abstract class SpringUtilities {
     }
 
     return Collections.emptyMap();
+  }
+
+  private static Predicate<BeanDefinition> hasMethodAnnotation(Class<? extends Annotation> type) {
+    return beanDefinition -> {
+      if (beanDefinition.getSource() instanceof MethodMetadata) {
+        MethodMetadata metadata = (MethodMetadata) beanDefinition.getSource();
+        return metadata.isAnnotated(type.getName());
+      }
+      return false;
+    };
   }
 }

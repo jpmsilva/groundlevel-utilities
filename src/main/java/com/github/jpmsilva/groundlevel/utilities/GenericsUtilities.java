@@ -20,24 +20,60 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.function.Supplier;
 
+/**
+ * Utilities related to generics.
+ */
 public abstract class GenericsUtilities {
 
   private GenericsUtilities() {
   }
 
+  /**
+   * Casts an object to a certain type, if it can be casted, or throws a {@link ClassCastException} otherwise.
+   *
+   * @param o the object to cast
+   * @param <T> the type to cast to
+   * @return the casted object
+   */
   @SuppressWarnings("unchecked")
   public static <T> T cast(Object o) {
     return (T) o;
   }
 
+  /**
+   * Casts an object to a certain type, if it can be casted, or returns {@code null} otherwise.
+   *
+   * @param o the object to cast
+   * @param type the type to cast to
+   * @param <T> the type to cast to
+   * @return the casted object
+   */
   public static <T> T cast(Object o, Class<T> type) {
     return cast(o, () -> null, type);
   }
 
+  /**
+   * Casts an object to a certain type, if it can be casted, or returns a default value otherwise.
+   *
+   * @param o the object to cast
+   * @param type the type to cast to
+   * @param defaultValue the default valye to use when the object canno tbe cast
+   * @param <T> the type to cast to
+   * @return the casted object
+   */
   public static <T> T cast(Object o, Class<T> type, T defaultValue) {
     return cast(o, () -> defaultValue, type);
   }
 
+  /**
+   * Casts an object to a certain type, if it can be casted, or returns the result of a supplier otherwise.
+   *
+   * @param o the object to cast
+   * @param supplier the supplied to use when the object cannot be cast
+   * @param type the type to cast to
+   * @param <T> the type to cast to
+   * @return the casted object
+   */
   public static <T> T cast(Object o, Supplier<T> supplier, Class<T> type) {
     notNull(o);
     notNull(type);
@@ -45,6 +81,17 @@ public abstract class GenericsUtilities {
     return type.isInstance(o) ? cast(o) : supplier.get();
   }
 
+  /**
+   * Casts an object to a certain type, if it can be casted, or throws an error otherwise.
+   *
+   * @param o the object to cast
+   * @param type the type to cast to
+   * @param error the exception to throw
+   * @param <T> the type to cast to
+   * @param <E> the type of the error to throw
+   * @return the casted object
+   * @throws E when the object cannot be casted
+   */
   public static <T, E extends Throwable> T cast(Object o, Class<T> type, E error) throws E {
     notNull(o);
     notNull(type);

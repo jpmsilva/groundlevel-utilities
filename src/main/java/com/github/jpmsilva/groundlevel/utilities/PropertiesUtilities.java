@@ -21,17 +21,34 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Properties;
 
+/**
+ * Utilities related to {@link Properties}.
+ */
 public abstract class PropertiesUtilities {
 
   private PropertiesUtilities() {
   }
 
+  /**
+   * Reads a {@link Properties} from a string representation.
+   *
+   * @param input the string representation
+   * @return the loaded properties
+   * @throws IOException when the string cannot be read (should not really occur)
+   */
   public static Properties fromString(String input) throws IOException {
     Properties properties = new Properties();
     properties.load(new StringReader(input));
     return properties;
   }
 
+  /**
+   * Writes a {@link Properties} to a string representation.
+   *
+   * @param properties the properties to write
+   * @return the string representation
+   * @throws IOException when the string cannot be created (should not really occur)
+   */
   public static String asString(Properties properties) throws IOException {
     StringWriter writer = new StringWriter();
     properties.store(writer, null);
