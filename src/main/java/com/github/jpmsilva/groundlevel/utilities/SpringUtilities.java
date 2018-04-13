@@ -29,6 +29,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.MethodMetadata;
 
@@ -41,6 +42,18 @@ public abstract class SpringUtilities {
   }
 
   /**
+   * Obtains a {@link List} of beans from a {@link ApplicationContextEvent}, sorted under {@link QuackAnnotationAwareOrderComparator} rules.
+   *
+   * @param event the application context event to obtain the beans
+   * @param type the type of beans to obtain
+   * @param <T> the type of beans to obtain
+   * @return the sorted list of beans
+   */
+  public static <T> List<T> getSortedBeansOfType(ApplicationContextEvent event, Class<T> type) {
+    return getSortedBeansOfType(getConfigurableListableBeanFactory(event), type);
+  }
+
+  /**
    * Obtains a {@link List} of beans from a {@link ApplicationContext}, sorted under {@link QuackAnnotationAwareOrderComparator} rules.
    *
    * @param applicationContext the application context to obtain the beans
@@ -48,13 +61,8 @@ public abstract class SpringUtilities {
    * @param <T> the type of beans to obtain
    * @return the sorted list of beans
    */
-  public static <T> List<T> getSortedBeansOfType(ApplicationContext applicationContext,
-      Class<T> type) {
-    if (applicationContext instanceof ConfigurableApplicationContext) {
-      return getSortedBeansOfType(
-          ((ConfigurableApplicationContext) applicationContext).getBeanFactory(), type);
-    }
-    return getSortedBeansOfType((BeanFactory) applicationContext, type);
+  public static <T> List<T> getSortedBeansOfType(ApplicationContext applicationContext, Class<T> type) {
+    return getSortedBeansOfType(getConfigurableListableBeanFactory(applicationContext), type);
   }
 
   /**
@@ -184,5 +192,26 @@ public abstract class SpringUtilities {
       }
       return false;
     };
+  }
+
+  private static ConfigurableListableBeanFactory getConfigurableListableBeanFactory(ApplicationContextEvent event) {
+    return getConfigurableListableBeanFactory(event.getApplicationContext());
+  }
+
+  private static ConfigurableListableBeanFactory getConfigurableListableBeanFactory(ApplicationContext applicationContext) {
+    if (applicationContext instanceof ConfigurableApplicationContext) {
+      return ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
+    }
+    if (applicationContext instanceof ConfigurableListableBeanFactory) {
+      return (ConfigurableListableBeanFactory) applicationContext;
+    }
+    return null;
+  }
+
+  private static ConfigurableListableBeanFactory getConfigurableListableBeanFactory(BeanFactory beanFactory) {
+    if (beanFactory instanceof ConfigurableListableBeanFactory) {
+      return (ConfigurableListableBeanFactory) beanFactory;
+    }
+    return null;
   }
 }

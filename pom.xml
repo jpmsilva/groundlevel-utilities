@@ -21,7 +21,7 @@ limitations under the License.
 
   <groupId>com.github.jpmsilva.groundlevel-utilities</groupId>
   <artifactId>groundlevel-utilities</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
   <name>groundlevel-utilities</name>
   <description>General purpose library with reusable code for Spring projects</description>
@@ -378,7 +378,7 @@ limitations under the License.
                   <description>Version ${project.version}</description>
                   <releaseName>${project.version}</releaseName>
                   <tag>version-${project.version}</tag>
-                  <repositoryId>jpmsilva/jsystemd</repositoryId>
+                  <repositoryId>jpmsilva/groundlevel-utilities</repositoryId>
                 </configuration>
               </execution>
             </executions>
