@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 /**
  * Utilities related to lambdas.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class LambdaUtilities {
 
   private LambdaUtilities() {

@@ -36,6 +36,7 @@ import org.springframework.core.type.MethodMetadata;
 /**
  * Utilities related to the Spring framework.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class SpringUtilities {
 
   private SpringUtilities() {
@@ -123,7 +124,7 @@ public abstract class SpringUtilities {
    *     }
    * </pre>
    *
-   * <p>In such a case, fetching the annotation attributes of {@code @Order} on an instance of {@code MyBean} will wield a map with key="value" and value=1.
+   * <p>In such a case, fetching the annotation attributes of {@code @Order} on an instance of {@code MyBean} will yield a map with key="value" and value=1.
    *
    * <p>Now consider that an instance of the class {@code MyBean} is also defined as a Spring bean, using a configuration class such as:
    *
@@ -137,7 +138,7 @@ public abstract class SpringUtilities {
    *     }
    * </pre>
    *
-   * <p>In such a case, fetching the annotation attributes of {@code @Order} on the instance {@code myBean()} will wield a map with key="value" and value=2.
+   * <p>In such a case, fetching the annotation attributes of {@code @Order} on the instance {@code myBean()} will yield a map with key="value" and value=2.
    *
    * <p>Annotations at the method level take precedence over annotations at the class level.
    *

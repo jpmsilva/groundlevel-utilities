@@ -16,12 +16,10 @@
 
 package com.github.jpmsilva.groundlevel.utilities;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import org.apache.commons.lang3.reflect.MethodUtils;
+import java.util.Objects;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.Ordered;
@@ -39,6 +37,7 @@ import org.springframework.core.annotation.Order;
  * <p>3) beans do not need to implement {@link Ordered}, they simply need to have a public method with the signature {@code int getOrder()}, and that method
  * will be used to also determine the order value.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class QuackAnnotationAwareOrderComparator extends OrderComparator {
 
   private final ConfigurableListableBeanFactory beanFactory;
@@ -50,7 +49,7 @@ public class QuackAnnotationAwareOrderComparator extends OrderComparator {
    * @param beanFactory The bean factory to check for method annotations.
    */
   public QuackAnnotationAwareOrderComparator(ConfigurableListableBeanFactory beanFactory) {
-    notNull(beanFactory);
+    Objects.requireNonNull(beanFactory);
     this.beanFactory = beanFactory;
   }
 
@@ -73,13 +72,16 @@ public class QuackAnnotationAwareOrderComparator extends OrderComparator {
       }
 
       // Finally we check if it quacks like an Ordered
-      Method getOrder = MethodUtils.getAccessibleMethod(obj.getClass(), "getOrder");
-      if (getOrder != null && Integer.TYPE.equals(getOrder.getReturnType())) {
-        try {
-          return (Integer) getOrder.invoke(obj);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-          throw new RuntimeException(e);
+      try {
+        Method getOrder = obj.getClass().getMethod("getOrder");
+        if (getOrder != null && Integer.TYPE.equals(getOrder.getReturnType())) {
+          try {
+            return (Integer) getOrder.invoke(obj);
+          } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+          }
         }
+      } catch (NoSuchMethodException ignored) {
       }
     }
     return Ordered.LOWEST_PRECEDENCE;
