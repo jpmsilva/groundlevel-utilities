@@ -16,13 +16,13 @@
 
 package com.github.jpmsilva.groundlevel.utilities;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
  * Utilities related to generics.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class GenericsUtilities {
 
   private GenericsUtilities() {
@@ -57,7 +57,7 @@ public abstract class GenericsUtilities {
    *
    * @param o the object to cast
    * @param type the type to cast to
-   * @param defaultValue the default valye to use when the object canno tbe cast
+   * @param defaultValue the default value to use when the object cannot be cast
    * @param <T> the type to cast to
    * @return the casted object
    */
@@ -75,9 +75,9 @@ public abstract class GenericsUtilities {
    * @return the casted object
    */
   public static <T> T cast(Object o, Supplier<T> supplier, Class<T> type) {
-    notNull(o);
-    notNull(type);
-    notNull(supplier);
+    Objects.requireNonNull(o);
+    Objects.requireNonNull(type);
+    Objects.requireNonNull(supplier);
     return type.isInstance(o) ? cast(o) : supplier.get();
   }
 
@@ -93,9 +93,9 @@ public abstract class GenericsUtilities {
    * @throws E when the object cannot be casted
    */
   public static <T, E extends Throwable> T cast(Object o, Class<T> type, E error) throws E {
-    notNull(o);
-    notNull(type);
-    notNull(error);
+    Objects.requireNonNull(o);
+    Objects.requireNonNull(type);
+    Objects.requireNonNull(error);
     if (type.isInstance(o)) {
       return cast(o);
     }

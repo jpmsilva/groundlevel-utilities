@@ -24,6 +24,7 @@ import java.util.Properties;
 /**
  * Utilities related to {@link Properties}.
  */
+@SuppressWarnings({"unused"})
 public abstract class PropertiesUtilities {
 
   private PropertiesUtilities() {

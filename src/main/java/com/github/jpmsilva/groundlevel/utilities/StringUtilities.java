@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 /**
  * Utilities related to {@link String}.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class StringUtilities {
 
   private StringUtilities() {
