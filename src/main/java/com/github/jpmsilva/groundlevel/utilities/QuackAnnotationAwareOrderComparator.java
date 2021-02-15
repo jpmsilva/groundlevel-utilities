@@ -74,7 +74,7 @@ public class QuackAnnotationAwareOrderComparator extends OrderComparator {
       // Finally we check if it quacks like an Ordered
       try {
         Method getOrder = obj.getClass().getMethod("getOrder");
-        if (getOrder != null && Integer.TYPE.equals(getOrder.getReturnType())) {
+        if (Integer.TYPE.equals(getOrder.getReturnType())) {
           try {
             return (Integer) getOrder.invoke(obj);
           } catch (IllegalAccessException | InvocationTargetException e) {
